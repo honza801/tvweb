@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+<head>
+	<title>${title}</title>
+</head>
+<body>
+	<h1>${title}</h1>
+	<p>Last played: ${lastplayed}</p>
+	
+	<table>
+	<tr>
+		<th>Channel:</th>
+		<td>
+			<form action="changechannel" method="post">
+				<table border="0">
+					<tr><td>
+						<select name="channel">
+						<option py:for="c in channels" value="$c">$c</option>
+						</select>
+					</td></tr>
+					<tr><td><input type="submit" value="Play" /></td></tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td>
+			<form action="stopplaying" method="post">
+				<table><tr><td><input type="submit" value="Stop" /></td></tr></table>
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>Volume:</th>
+		<td>
+			<table><tr>
+				<td>
+				<form action="volup" method="post">
+					<input type="submit" value="+" />
+				</form>
+				</td><td>
+				<form action="voldown" method="post">
+					<input type="submit" value="-" />
+				</form>
+				</td>
+			</tr></table>
+		</td>
+	</tr>
+	</table>
+
+	<hr />
+	<p class="legalese">(c) Fous, 2009</p>
+</body>
+</html>
