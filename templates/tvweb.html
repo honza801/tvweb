@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:py="http://genshi.edgewall.org/">
+<head>
+	<title>${title}</title>
+</head>
+<body>
+	<h1>${title}</h1>
+	
+	<p>Last played: ${lastplayed} from ${lastip}</p>
+	<table border="0">
+	<tr>
+	<td>
+		<xi:include href="channeltable.html" />
+	</td>
+	<td width="50"></td>
+	<td valign="top">
+		<xi:include href="monitorpower.html" />
+	</td>
+	</tr>
+	</table>
+
+	<hr />
+	<p class="legalese">(c) Fous, 2009</p>
+</body>
+</html>

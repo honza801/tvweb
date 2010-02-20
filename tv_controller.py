@@ -51,16 +51,26 @@ class VolumeController:
 		return self.mixdevice.getvolume()
 	
 	def volup(self):
-		newvol = self.mixdevice.getvolume()+10
+		newvol = int(self.mixdevice.getvolume()[0])+10
 		if newvol > 100:
 			newvol = 100
 		self.mixdevice.setvolume(newvol)
 	
 	def voldown(self):
-		newvol = self.mixdevice.getvolume()-10
+		newvol = int(self.mixdevice.getvolume()[0])-10
 		if newvol < 0:
 			newvol = 0
 		self.mixdevice.setvolume(newvol)
+
+class MonitorController:
+	
+	def turnon(self):
+		ret = os.system("m on")
+		return ret
+
+	def turnoff(self):
+		ret = os.system("m off")
+		return ret
 
 
 if __name__ == "__main__":

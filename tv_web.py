@@ -9,25 +9,36 @@ from genshi.template import TemplateLoader
 import tv_controller
 
 class TvWeb:
+
 	# constructor
 	def __init__(self):
 		self.mpc = tv_controller.MplayerController()
-		self.vol = tv_controller.VolumeController()
+		self.vol = tv_controller.VolumeController('PCM')
+		self.monitor = tv_controller.MonitorController()
 		self.lastplayed = 'Unknown'
+		self.lastip = "Unknown"
 
 	# main page
 	def index(self):
-		tmpl = loader.load('choose.html')
-		stream = tmpl.generate(title="TV Station Web Interface!", channels=self.mpc.getchannels(), lastplayed=self.lastplayed)
+		if not self.hostallowed(): return "You are not alowed."
+		tmpl = loader.load('tvweb.html')
+		stream = tmpl.generate(
+			title="TV Station Web Interface!", 
+			channels=self.mpc.getchannels(), 
+			lastplayed=self.lastplayed, 
+			curvolume=self.vol.getvolume()[0],
+			lastip=self.lastip)
 		return stream.render('html', doctype='html')
 	
 	index.exposed = True
 
 	# changes channel
 	def changechannel(self, channel=None):
+		if not self.hostallowed(): return "You are not alowed."
 		if cherrypy.request.method == 'POST':
 			if channel : 
 				self.lastplayed = channel
+				self.lastip = cherrypy.request.remote.ip
 				self.mpc.play(channel)
 				time.sleep(2)
 			raise cherrypy.HTTPRedirect('/tvweb')
@@ -37,8 +48,10 @@ class TvWeb:
 
 	# stops playing
 	def stopplaying(self):
+		if not self.hostallowed(): return "You are not alowed."
 		if cherrypy.request.method == 'POST':
 			self.lastplayed = 'Stopped'
+			self.lastip = cherrypy.request.remote.ip
 			self.mpc.kill()
 			raise cherrypy.HTTPRedirect('/tvweb')
 		return "POST request expected, but "+cherrypy.request.method+" arrived!"
@@ -47,6 +60,7 @@ class TvWeb:
 
 	# volume up
 	def volup(self):
+		if not self.hostallowed(): return "You are not alowed."
 		if cherrypy.request.method == 'POST':
 			self.vol.volup()
 			raise cherrypy.HTTPRedirect('/tvweb')
@@ -56,6 +70,7 @@ class TvWeb:
 
 	# volume down
 	def voldown(self):
+		if not self.hostallowed(): return "You are not alowed."
 		if cherrypy.request.method == 'POST':
 			self.vol.voldown()
 			raise cherrypy.HTTPRedirect('/tvweb')
@@ -63,11 +78,44 @@ class TvWeb:
 
 	voldown.exposed = True
 
+	# monitor turn on
+	def monitoron(self):
+		if not self.hostallowed(): return "You are not alowed."
+		if cherrypy.request.method == 'POST':
+			self.monitor.turnon()
+			raise cherrypy.HTTPRedirect('/tvweb')
+		return "POST request expected, but "+cherrypy.request.method+" arrived!"
+
+	monitoron.exposed = True
+
+	# monitor turn off
+	def monitoroff(self):
+		if not self.hostallowed(): return "You are not alowed."
+		if cherrypy.request.method == 'POST':
+			self.monitor.turnoff()
+			raise cherrypy.HTTPRedirect('/tvweb')
+		return "POST request expected, but "+cherrypy.request.method+" arrived!"
+
+	monitoroff.exposed = True
+	
+	def test(self):
+		return "test ok."
+
+	test.exposed = True
+
 	# default function
 	def default(self, *another): 
 		raise cherrypy.HTTPRedirect('/tvweb')
 	
 	default.exposed = True
+	
+	# checks allowed hosts
+	def hostallowed(self):
+		allowed = [ '128.10.20.5' , '10.10.60.13' ]
+		hostip = cherrypy.request.remote.ip
+		if hostip in allowed:
+			return True
+		return False
 
 
 class Prefix:
