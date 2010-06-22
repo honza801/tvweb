@@ -5,13 +5,13 @@ import string
 import signal
 import alsaaudio
 
-class MplayerController:
+class VideoController:
 	
 	def __init__(self):
 		self.vars = "XAUTHORITY=/home/honza801/.Xauthority DISPLAY=:0.0"
 
 	def is_running(self):
-		process = os.popen('pgrep mplayer').readline()
+		process = os.popen('pgrep vlc').readline()
 		if process != "":
 			return int(string.strip(process))
 		return -1
@@ -38,7 +38,7 @@ class MplayerController:
 			print "Another mplayer is running with pid", pid
 			return
 		else:
-			ret = os.system(self.vars+" tv "+channel+" >/dev/null 2>&1 &")
+			ret = os.system(self.vars+" screen -X screen tv "+channel)
 			print ret
 
 
@@ -74,6 +74,6 @@ class MonitorController:
 
 
 if __name__ == "__main__":
-	mpc = MplayerController()
+	mpc = VideoController()
 	mpc.play("ct1")
 

@@ -12,7 +12,7 @@ class TvWeb:
 
 	# constructor
 	def __init__(self):
-		self.mpc = tv_controller.MplayerController()
+		self.mpc = tv_controller.VideoController()
 		self.vol = tv_controller.VolumeController('PCM')
 		self.monitor = tv_controller.MonitorController()
 		self.lastplayed = 'Unknown'
