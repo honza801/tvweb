@@ -1,0 +1,7 @@
+*.log
+*.pid
+*.pyc
+cherrypy/
+flup/
+genshi/
+
