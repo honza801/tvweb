@@ -2,9 +2,18 @@
 
 PID="cherryd.pid"
 LOG="0"
-CONFIG="tutorial.conf"
+CONFIG="cherryd-tvweb.conf"
 IMPORT="tv_web"
-export PYTHONPATH="/home/honza801/tvweb"
+export PYTHONPATH=`pwd`
+
+function printhelp {
+	cat << EOF
+Usage: `basename $0` [-i|-log|--help]
+  -i    import some other module
+  -log  log into cherryd.log and put itself to background
+  --help this help screen
+EOF
+}
 
 case "$1" in 
 	-i) 
@@ -14,6 +23,10 @@ case "$1" in
 	-log)
 		LOG="1"
 		shift
+	;;
+	--help)
+		printhelp
+		exit 1
 	;;
 	*)
 		echo "unknown option"
