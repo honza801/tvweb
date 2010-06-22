@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# mplayer parametres
+#prms="-stereo 1 -vf pp=lb -cache 2048"
+prms="--video-filter=deinterlace --deinterlace-mode=blend -f"
+conf="$HOME/bin/tv.conf"
+
+# shows all available channels
+function show_channels() {
+	for a in `grep -v "#" $conf | cut -d":" -f1`; do
+		echo -n "$a, "
+	done
+	echo
+}
+
+# some usage informations
+function show_help() {
+	echo "Usage: `basename $0` <param>  [nocache|nostereo]"
+	echo
+	echo "<param> is one of:"
+	echo "  <channel> is parsed from $conf, now is one of"
+	show_channels
+	echo "  usage, help            show this help screen"
+	echo "  listchannels, lschan    list available channels"
+	echo
+	echo "Have fun..."
+}
+
+# look for config file
+if [ ! -f "$conf" ]; then
+	echo "Could not find config file, should be $conf."
+	exit 1
+fi
+
+# check params
+if [ $# -eq 0 ]; then
+	echo "Not enough parameters"
+	show_help
+	exit 1
+fi
+
+# some custom actions
+case $1 in
+	usage|help)
+		show_help
+		exit 0
+	;;
+	listchannels|lschan)
+		show_channels
+		exit 0
+	;;
+esac
+
+
+# get the station
+gettv=`grep "$1:" $conf`
+if [ "$gettv" ]; then
+	addr=`echo "$gettv" | grep -v "#" | cut -d":" -f2-`
+else
+	echo "$1 :: unknown channel"
+	exit 1
+fi
+ 
+# check for cache param
+case $2 in
+	nocache)
+		cache=""
+	;;
+	nostereo)
+		prms=""
+	;;
+esac
+
+# let's play
+#echo "Running: mplayer ${addr/@/} $params"
+#mplayer ${addr} $params
+echo "Running: cvlc $prms $addr"
+cvlc $prms ${addr} 
+

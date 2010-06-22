@@ -122,7 +122,7 @@ class Prefix:
 	tvweb = TvWeb()
 	
 import os.path
-tutconf = os.path.join(os.path.dirname(__file__), 'cherryd-tvweb.conf')
+tutconf = os.path.join(os.path.dirname(__file__), 'etc/cherryd-tvweb.conf')
 
 loader = TemplateLoader('templates', auto_reload=True)
 	

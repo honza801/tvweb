@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ "x$1" == "xon" ]; then
+	st="on"
+else
+	st="off"
+fi
+
+sleep 1
+xset dpms force $st
+

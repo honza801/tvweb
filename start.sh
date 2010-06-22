@@ -2,7 +2,7 @@
 
 PID="cherryd.pid"
 LOG="0"
-CONFIG="cherryd-tvweb.conf"
+CONFIG="etc/cherryd-tvweb.conf"
 IMPORT="tv_web"
 export PYTHONPATH=`pwd`
 
