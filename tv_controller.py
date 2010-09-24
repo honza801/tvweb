@@ -38,7 +38,7 @@ class VideoController:
 			print "Another mplayer is running with pid", pid
 			return
 		else:
-			ret = os.system(self.vars+" screen -X screen tv "+channel)
+			ret = os.system(self.vars+" screen -X screen /home/honza801/bin/tv "+channel)
 			print ret
 
 
