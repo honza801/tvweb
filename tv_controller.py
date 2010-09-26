@@ -1,4 +1,3 @@
-#!/usr/bin/python
 
 import os
 import string
@@ -32,14 +31,27 @@ class VideoController:
 			print "Sending SIGTERM to", pid
 			os.kill(pid,signal.SIGTERM)
 
-	def play(self, channel):
+	def play_tv(self, channel):
 		pid = self.is_running()
 		if pid > 0:
 			print "Another mplayer is running with pid", pid
 			return
 		else:
-			ret = os.system(self.vars+" screen -X screen /home/honza801/bin/tv "+channel)
-			print ret
+			q = self.vars+" screen -X screen /home/honza801/bin/tv "+channel
+			ret = os.system(q)
+			print q, ret
+	
+	def play(self, file):
+		if not os.path.isfile(file):
+			return
+		pid = self.is_running()
+		if pid > 0:
+			print "Another mplayer is running with pid", pid
+			return
+		else:
+			q = self.vars+" screen -X screen /home/honza801/bin/tv \""+file+"\""
+			ret = os.system(q)
+			print q, ret
 
 
 class VolumeController:
@@ -75,5 +87,5 @@ class MonitorController:
 
 if __name__ == "__main__":
 	mpc = VideoController()
-	mpc.play("ct1")
+	mpc.play_tv("ct1")
 

@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:py="http://genshi.edgewall.org/" py:strip="">
+	
+	<h1>File chooser tool</h1>
+	<p>
+	<strong>current dir:</strong>&nbsp;${curdir}
+	</p>
+
+	<table><tr>
+	<td py:for="d in alloweddirs"><a href="fcaction?item=${d}">${d}</a></td>
+	</tr></table>
+
+	<ul>
+		<li py:for="f in dirlisting"><a href="fcaction?item=${curdir}/${f}">$f</a></li>
+	</ul>
+
+</html>

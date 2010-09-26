@@ -7,6 +7,7 @@ import cherrypy
 import time
 from genshi.template import TemplateLoader
 import tv_controller
+import filechooser
 
 class TvWeb:
 
@@ -15,6 +16,7 @@ class TvWeb:
 		self.mpc = tv_controller.VideoController()
 		self.vol = tv_controller.VolumeController('PCM')
 		self.monitor = tv_controller.MonitorController()
+		self.filechooser = filechooser.FileChooser()
 		self.lastplayed = 'Unknown'
 		self.lastip = "Unknown"
 
@@ -27,7 +29,10 @@ class TvWeb:
 			channels=self.mpc.getchannels(), 
 			lastplayed=self.lastplayed, 
 			curvolume=self.vol.getvolume()[0],
-			lastip=self.lastip)
+			lastip=self.lastip,
+			curdir=self.filechooser.getCurrentPath(),
+			dirlisting=self.filechooser.getList(),
+			alloweddirs=self.filechooser.getAllowed())
 		return stream.render('html', doctype='html')
 	
 	index.exposed = True
@@ -39,7 +44,7 @@ class TvWeb:
 			if channel : 
 				self.lastplayed = channel
 				self.lastip = cherrypy.request.remote.ip
-				self.mpc.play(channel)
+				self.mpc.play_tv(channel)
 				time.sleep(2)
 			raise cherrypy.HTTPRedirect('/tvweb')
 		return "POST request expected, but "+cherrypy.request.method+" arrived!"
@@ -97,7 +102,22 @@ class TvWeb:
 		return "POST request expected, but "+cherrypy.request.method+" arrived!"
 
 	monitoroff.exposed = True
-	
+
+	def fcaction(self, item=None):
+		if not self.hostallowed(): return "You are not alowed."
+		if cherrypy.request.method == 'GET':
+			if os.path.isfile(item):
+				self.lastplayed = item
+				self.lastip = cherrypy.request.remote.ip
+				self.mpc.play(item)
+				time.sleep(2)
+			if os.path.isdir(item):
+				self.filechooser.setPath(item)
+			raise cherrypy.HTTPRedirect('/tvweb')
+		return "GET request expected, but "+cherrypy.request.method+" arrived!"
+
+	fcaction.exposed = True
+
 	def test(self):
 		return "test ok."
 

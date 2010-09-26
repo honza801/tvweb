@@ -58,7 +58,7 @@ if [ "$gettv" ]; then
 	addr=`echo "$gettv" | grep -v "#" | cut -d":" -f2-`
 else
 	echo "$1 :: unknown channel"
-	exit 1
+	addr=$1
 fi
  
 # check for cache param
@@ -74,6 +74,6 @@ esac
 # let's play
 #echo "Running: mplayer ${addr/@/} $params"
 #mplayer ${addr} $params
-echo "Running: cvlc $prms $addr"
-cvlc $prms ${addr} 
+echo "Running: cvlc $prms ${addr}"
+cvlc $prms "${addr}"
 
