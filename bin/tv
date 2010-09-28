@@ -2,7 +2,7 @@
 
 # mplayer parametres
 #prms="-stereo 1 -vf pp=lb -cache 2048"
-prms="--video-filter=deinterlace --deinterlace-mode=blend -f"
+prms="--extraintf ncurses --video-filter=deinterlace --deinterlace-mode=blend -f"
 conf="$HOME/bin/tv.conf"
 
 # shows all available channels
