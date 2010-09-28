@@ -32,7 +32,9 @@ class FileChooser():
 			return False
 	
 	def getList(self):
-		return os.listdir(self.cpath)
+		out = os.listdir(self.cpath)
+		out.sort()
+		return out
 	
 		
 if __name__ == "__main__":
