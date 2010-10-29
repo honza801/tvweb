@@ -103,6 +103,7 @@ class TvWeb:
 
 	monitoroff.exposed = True
 
+	# file action 
 	def fcaction(self, item=None):
 		if not self.hostallowed(): return "You are not alowed."
 		if cherrypy.request.method == 'GET':
@@ -111,8 +112,10 @@ class TvWeb:
 				self.lastip = cherrypy.request.remote.ip
 				self.mpc.play(item)
 				time.sleep(2)
-			if os.path.isdir(item):
-				self.filechooser.setPath(item)
+			elif os.path.isdir(item):
+					self.filechooser.setPath(item)
+			else:
+				self.filechooser.goBack(item)
 			raise cherrypy.HTTPRedirect('/tvweb')
 		return "GET request expected, but "+cherrypy.request.method+" arrived!"
 

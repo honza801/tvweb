@@ -10,7 +10,9 @@ class FileChooser():
 			'/mnt/data',
 			'/home/ftp/serialy',
 			'/mnt/kesunka/serialy',
+			'/mnt/kesunka/video',
 			]
+		self.back_item = '__back__'
 		self.cpath = self.allowed_prefix[0] 
 	
 	def getAllowed(self):
@@ -34,6 +36,14 @@ class FileChooser():
 			return True
 		else:
 			return False
+
+	def goBack(self, item=None):
+		print "go back"
+		if item.split('/')[-1] == self.back_item:
+			print "matches ", self.back_item
+			out = self.cpath[:self.cpath.rfind('/')]
+			if re.match("("+string.join(self.allowed_prefix, "|")+")", out):
+				self.cpath = out
 	
 	def getList(self):
 		out = self.transformList(os.listdir(self.cpath))
@@ -45,6 +55,7 @@ class FileChooser():
 		for d in list:
 			if all(ord(c) < 128 for c in d):
 				out.append(d)
+		out.insert(0, self.back_item)
 		return out
 
 		
