@@ -7,7 +7,7 @@ import alsaaudio
 class VideoController:
 	
 	def __init__(self):
-		self.vars = "XAUTHORITY=/home/honza801/.Xauthority DISPLAY=:0.0"
+		pass
 
 	def is_running(self):
 		process = os.popen('pgrep vlc').readline()
@@ -37,7 +37,7 @@ class VideoController:
 			print "Another mplayer is running with pid", pid
 			return
 		else:
-			q = self.vars+" screen -X screen /home/honza801/bin/tv "+channel
+			q = "tmux neww '/home/honza801/bin/tv "+channel+"'"
 			ret = os.system(q)
 			print q, ret
 	
@@ -49,7 +49,7 @@ class VideoController:
 			print "Another mplayer is running with pid", pid
 			return
 		else:
-			q = self.vars+" screen -X screen /home/honza801/bin/tv \""+file+"\""
+			q = "tmux neww '/home/honza801/bin/tv \""+file+"\"'"
 			ret = os.system(q)
 			print q, ret
 

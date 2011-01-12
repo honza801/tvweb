@@ -134,7 +134,7 @@ class TvWeb:
 	
 	# checks allowed hosts
 	def hostallowed(self):
-		allowed = [ '128.10.20.1', '128.10.20.5' , '10.10.60.14', '127.0.0.1', ]
+		allowed = [ '128.10.20.1', '128.10.20.5' , '10.10.60.14', '127.0.0.1', '192.168.100.104', ]
 		hostip = cherrypy.request.remote.ip
 		if hostip in allowed:
 			return True
